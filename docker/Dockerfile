@@ -28,11 +28,12 @@ ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 # Install any extra (forgotten...) R packages since base
 #------------------------------------------------------------
 
-RUN R -e "remotes::install_github('JohnCoene/firebase@omics')" 
-RUN R -e "install.packages(c('shinylogs','shinycssloaders'))"
+RUN R -e "remotes::install_github('JohnCoene/firebase@omics')"
+RUN R -e "remotes::install_github('bigomics/bigdash')" 
+RUN R -e "install.packages(c('shinylogs','shinycssloaders','concaveman','ggtext','sass'))"
 RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/locfit/locfit_1.5-9.4.tar.gz')"
 RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-14.tar.gz')"
-RUN R -e "BiocManager::install(c('edgeR','DESeq2'))"
+# RUN R -e "BiocManager::install(c('edgeR','DESeq2'))"
 # RUN pip3 install umap-learn
 
 #------------------------------------------------------------
@@ -42,10 +43,11 @@ WORKDIR /
 ARG TAG=master
 RUN echo Downloading $TAG branch
 RUN wget -nv https://github.com/bigomics/omicsplayground/archive/$TAG.zip \
+    && rm -fr /omicsplayground*  \
     && unzip $TAG.zip \
-    && rm -fr /omicsplayground  \
     && mv omicsplayground-$TAG omicsplayground \
-    && chmod -R ugo+rwX /omicsplayground 
+    && chmod -R ugo+rwX /omicsplayground \
+    && rm $TAG.zip   
 
 #------------------------------------------------------------
 # Copy any extra data sets into Docker image
@@ -53,7 +55,7 @@ RUN wget -nv https://github.com/bigomics/omicsplayground/archive/$TAG.zip \
 WORKDIR /omicsplayground
 ## RUN R -e "setwd('scripts');source('build-datasets.R')"
 ## COPY data/geiger2016-arginine.pgx data/
-RUN R -e "setwd('data');source('init.R')"
+## RUN R -e "setwd('data');source('init.R')"
 
 #------------------------------------------------------------
 # Update configuration files into the Docker image
@@ -65,4 +67,5 @@ WORKDIR /omicsplayground
 
 EXPOSE 3838
 #CMD ["/usr/bin/shiny-server.sh"]
-CMD ["R", "-e", "shiny::runApp('shiny', port=3838, host='0.0.0.0', launch.browser=FALSE)"]
+#CMD ["R", "-e", "shiny::runApp('shiny',port=3838,host='0.0.0.0',launch.browser=FALSE)"]
+CMD ["R", "-e", "shiny::runApp('components/app/R',port=3838,host='0.0.0.0')"]
