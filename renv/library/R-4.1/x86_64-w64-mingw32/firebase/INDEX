@@ -1,0 +1,17 @@
+Analytics               Analytics
+Firebase                Firebase
+FirebaseAuth            Firebase Authentication
+FirebaseEmailLink       Email Link
+FirebaseEmailPassword   Email & Password
+FirebaseOauthProviders
+                        OAuth Providers
+FirebasePhone           Phone
+FirebaseSocial          Social
+FirebaseUI              Prebuilt UI
+RealtimeDatabase        Realtime Database
+Storage                 Storage
+config                  Config
+dependencies            Dependencies
+recaptcha               Recaptcha
+reqSignin               Requires Signin
+reqSignout              Requires Signout
