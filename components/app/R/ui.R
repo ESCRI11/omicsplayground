@@ -4,19 +4,6 @@ app_ui <- function() {
     ## Build USERMENU
     #-------------------------------------------------------
     user.tab <-  tabView(title = "Settings", id="user", UserInputs("user"), UserUI("user"))    
-    ##title = shiny::HTML("<span class='label label-info' id='authentication-user'></span>"),
-    # logout.tab  <- shiny::tabPanel(shiny::HTML("<a onClick='logout()' id='authentication-logout'>Logout</a>"))
-    logout.tab <- bigdash::navbarDropdownItem(
-        "Logout",
-        onClick = "logout"
-    )
-
-    ## conditionally add if firebase authentication is enabled
-    if(opt$AUTHENTICATION == "shinyproxy") {
-        ## For ShinyProxy we need to redirect to /logout for clean session
-        ## logout. Then we need a redirect to the /login page.
-        logout.tab  <- shiny::tabPanel(shiny::HTML("<a href='/login' onClick='shinyproxy_logout();' id='authentication-logout'>Logout</a>"))    
-    }
 
     upgrade.tab <- NULL
     if(opt$AUTHENTICATION == "firebase") {
@@ -56,6 +43,8 @@ app_ui <- function() {
         )
         
         footer <- shiny::tagList(
+            SocialMediaModuleUI("socialmodal"),
+            SendReferralModuleUI("sendreferral"),                             
             shinybusy::busy_start_up(
                 text = "\nPrepping your personal playground...", mode = "auto",
                 background="#2780e3", color="#ffffff",
@@ -87,7 +76,6 @@ app_ui <- function() {
                 ),
                 shiny::div(shiny::textOutput("current_section"), class='current-section'),
                 shiny::div(shiny::textOutput("current_dataset"), class='current-dataset'),
-                ##shiny::div(shiny::textOutput("current_user"), class='current-user'),
                 bigdash::navbarDropdown(
                     "Support",
                     bigdash::navbarDropdownItem(
@@ -127,7 +115,7 @@ app_ui <- function() {
                 bigdash::navbarDropdown(
                     ##"User",
                     ##shiny::div(class='label label-info current-user',id='authentication-user'),
-                    shiny::textOutput("current_user"), 
+                    shiny::textOutput("current_user", inline = TRUE), 
                     bigdash::navbarDropdownTab(
                         "Settings",
                         "userSettings"
