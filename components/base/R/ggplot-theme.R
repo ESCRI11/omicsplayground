@@ -48,14 +48,15 @@ theme_omics <- function(style = "default", base_size = 15,
   if(!is.logical(panelborder)) stop('panelborder must be a logical variable')
   if(!is.numeric(margin)) stop('margin must be a numeric value')
   
-  fontfamily <- "" ## Clear Sans
-  fontfamily_mono <- "" ## Fira Code
+  fontfamily <- "Cabin" ## Clear Sans ## Cabin + Cabin Condensed
+  fontfamily_condensed <- "Cabin Condensed" ## Clear Sans ## Cabin + Cabin Condensed
+  fontfamily_mono <- "Lato" ## Fira Code
   
   if (style == "default") { base_col <- "black"; light_col <- "grey15" }
   if (style == "light") { base_col <- "grey30"; light_col <- "grey45" }
   
   out <-
-    ggplot2::theme_minimal(base_size = base_size, base_family = fontfamily) +
+    ggplot2::theme_minimal(base_size = base_size, base_family = fontfamily_condensed) +
     ggplot2::theme(
       text = ggplot2::element_text(
         color = base_col
@@ -88,21 +89,25 @@ theme_omics <- function(style = "default", base_size = 15,
       ),
       axis.title.x = ggplot2::element_text(
         size = base_size * .8,
+        family = fontfamily,
         face = "bold",
         margin = ggplot2::margin(t = base_size / 3, r = 3, b = 3, l = 3)
       ),
       axis.title.y = ggplot2::element_text(
         size = base_size * .8,
+        family = fontfamily,
         face = "bold",
         margin = ggplot2::margin(t = 3, r = 3, b = base_size / 3, l = 3)
       ),
       axis.title.y.left = ggplot2::element_text(
         size = base_size * .8,
+        family = fontfamily,
         face = "bold",
         margin = ggplot2::margin(t = 3, r = 3, b = base_size / 3, l = 3)
       ),
       axis.title.y.right = ggplot2::element_text(
         size = base_size * .8,
+        family = fontfamily,
         face = "bold",
         margin = ggplot2::margin(t = 3, r = 3, b = base_size / 3, l = 3)
       ),
@@ -139,6 +144,7 @@ theme_omics <- function(style = "default", base_size = 15,
       legend.title = ggplot2::element_text(
         color = light_col,
         size = base_size * .8,
+        family = fontfamily,
         face = "bold",
         margin = margin(b = 10)
       ),
@@ -168,12 +174,14 @@ theme_omics <- function(style = "default", base_size = 15,
     }
     if (!stringr::str_detect(axistitle, "Y|y")) {
       out <- out +
-        ggplot2::theme(axis.title.y = ggplot2::element_blank())
+        ggplot2::theme(axis.title.y = ggplot2::element_blank(), axis.title.y.left = ggplot2::element_blank())
     }
   } else {
     out <- out +
-      ggplot2::theme(axis.title.x = ggplot2::element_blank(),
-                     axis.title.y = ggplot2::element_blank())
+      ggplot2::theme(axis.title = ggplot2::element_blank(), 
+                     axis.title.x = ggplot2::element_blank(),
+                     axis.title.y = ggplot2::element_blank(),
+                     axis.title.y.left = ggplot2::element_blank())
   }
   
   if (axis_num != "none") {
@@ -236,7 +244,7 @@ theme_omics <- function(style = "default", base_size = 15,
       ggplot2::theme(legend.text = ggplot2::element_text(
         family = fontfamily_mono,
         color = light_col,
-        size = base_size * .75
+        size = base_size * .65
       ))
   }
   
